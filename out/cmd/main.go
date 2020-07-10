@@ -48,7 +48,14 @@ func main() {
 		message = message + fmt.Sprintf("Set Status: %s \n", request.Params.Status)
 		state := gitlab.BuildState(gitlab.BuildStateValue(request.Params.Status))
 		target := request.Source.GetTargetURL()
-		name := request.Source.GetPipelineName()
+
+		var name string
+		if request.Params.BuildLabel != "" {
+			name = request.Params.BuildLabel
+		} else {
+			name = request.Source.GetPipelineName()
+		}
+
 		options := gitlab.SetCommitStatusOptions{
 			Name:      &name,
 			TargetURL: &target,

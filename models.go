@@ -18,6 +18,7 @@ type Source struct {
 	PipelineName       string   `json:"pipeline_name,omitempty"`
 	Labels             []string `json:"labels,omitempty"`
 	TargetBranch       string   `json:"target_branch,omitempty"`
+	CheckBuildLabel    string   `json:"check_build_label,omitemty"`
 }
 
 type Version struct {
@@ -63,7 +64,9 @@ func (source *Source) GetCoucourseUrl() string {
 }
 
 func (source *Source) GetPipelineName() string {
-	if source.PipelineName != "" {
+	if source.CheckBuildLabel != "" {
+		return source.CheckBuildLabel
+	} else if source.PipelineName != "" {
 		return source.PipelineName
 	} else {
 		return os.Getenv("BUILD_PIPELINE_NAME")
